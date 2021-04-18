@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:reply/custom_transition_page.dart';
 import 'package:reply/home.dart';
 import 'package:reply/search_page.dart';
-
+import 'package:animations/animations.dart';
 import 'model/router_provider.dart';
 
 const String _homePageLocation = '/reply/home';
@@ -53,11 +53,10 @@ class ReplyRouterDelegate extends RouterDelegate<ReplyRoutePath>
                 transitionKey: ValueKey('home'),
                 screen: const HomePage(),
               ),
-
               if (routePath is ReplySearchPath)
-                const CustomTransitionPage(
-                  transitionKey: ValueKey('Search'),
-                  screen: SearchPage(),
+                const SharedAxisTransitionPageWrapper(
+                  transitionKey: ValueKey('search'),
+                  screen: const SearchPage(),
                 ),
             ],
           );
