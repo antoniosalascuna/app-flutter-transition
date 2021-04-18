@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -48,10 +49,11 @@ class ReplyRouterDelegate extends RouterDelegate<ReplyRoutePath>
             onPopPage: _handlePopPage,
             pages: [
               // TODO: Add Shared Z-Axis transition from search icon to search view page (Motion)
-              const CustomTransitionPage(
-                transitionKey: ValueKey('Home'),
-                screen: HomePage(),
+              const SharedAxisTransitionPageWrapper(
+                transitionKey: ValueKey('home'),
+                screen: const HomePage(),
               ),
+
               if (routePath is ReplySearchPath)
                 const CustomTransitionPage(
                   transitionKey: ValueKey('Search'),
@@ -98,6 +100,34 @@ class ReplySearchPath extends ReplyRoutePath {
 }
 
 // TODO: Add Shared Z-Axis transition from search icon to search view page (Motion)
+class SharedAxisTransitionPageWrapper extends Page {
+  const SharedAxisTransitionPageWrapper(
+      {@required this.screen, @required this.transitionKey})
+      : assert(screen != null),
+        assert(transitionKey != null),
+        super(key: transitionKey);
+
+  final Widget screen;
+  final ValueKey transitionKey;
+
+  @override
+  Route createRoute(BuildContext context) {
+    return PageRouteBuilder(
+        settings: this,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return SharedAxisTransition(
+            fillColor: Theme.of(context).cardColor,
+            animation: animation,
+            secondaryAnimation: secondaryAnimation,
+            transitionType: SharedAxisTransitionType.scaled,
+            child: child,
+          );
+        },
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return screen;
+        });
+  }
+}
 
 class ReplyRouteInformationParser
     extends RouteInformationParser<ReplyRoutePath> {
