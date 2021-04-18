@@ -391,31 +391,35 @@ class _AnimatedBottomAppBar extends StatelessWidget {
                           const SizedBox(width: 8),
                           const _ReplyLogo(),
                           const SizedBox(width: 10),
+
                           // TODO: Add Fade through transition between disappearing mailbox title (Motion)
-                          onMailView
-                              ? const SizedBox(width: 48)
-                              : FadeTransition(
-                                  opacity: fadeOut,
-                                  child: Selector<EmailStore, String>(
-                                    selector: (context, emailStore) =>
-                                        emailStore.currentlySelectedInbox,
-                                    builder: (
-                                      context,
-                                      currentlySelectedInbox,
-                                      child,
-                                    ) {
-                                      return Text(
+                          _FadeThroughTransitionSwitcher(
+                            fillColor: Colors.transparent,
+                            child: onMailView
+                                ? const SizedBox(height: 0, width: 48)
+                                : FadeTransition(
+                                    opacity: fadeOut,
+                                    child: Selector<EmailStore, String>(
+                                      selector: (context, emailStore) =>
+                                          emailStore.currentlySelectedInbox,
+                                      builder: (
+                                        context,
                                         currentlySelectedInbox,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1
-                                            .copyWith(
-                                              color: ReplyColors.white50,
-                                            ),
-                                      );
-                                    },
+                                        child,
+                                      ) {
+                                        return Text(
+                                          currentlySelectedInbox,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1
+                                              .copyWith(
+                                                color: ReplyColors.white50,
+                                              ),
+                                        );
+                                      },
+                                    ),
                                   ),
-                                ),
+                          ),
                         ],
                       ),
                     ),
@@ -720,7 +724,7 @@ class _ReplyFab extends StatefulWidget {
 class _ReplyFabState extends State<_ReplyFab>
     with SingleTickerProviderStateMixin {
   // TODO: Add Fade through transition between compose and reply FAB (Motion)
-  static final fabKey = UniqueKey(); 
+  static final fabKey = UniqueKey();
   static const double _mobileFabDimension = 56;
 
   @override
@@ -789,27 +793,27 @@ class _ReplyFabState extends State<_ReplyFab>
 
 // TODO: Add Fade through transition between compose and reply FAB (Motion)
 class _FadeThroughTransitionSwitcher extends StatelessWidget {
- const _FadeThroughTransitionSwitcher({
-   @required this.fillColor,
-   @required this.child,
- })  : assert(fillColor != null),
-       assert(child != null);
+  const _FadeThroughTransitionSwitcher({
+    @required this.fillColor,
+    @required this.child,
+  })  : assert(fillColor != null),
+        assert(child != null);
 
- final Widget child;
- final Color fillColor;
+  final Widget child;
+  final Color fillColor;
 
- @override
- Widget build(BuildContext context) {
-   return PageTransitionSwitcher(
-     transitionBuilder: (child, animation, secondaryAnimation) {
-       return FadeThroughTransition(
-         fillColor: fillColor,
-         child: child,
-         animation: animation,
-         secondaryAnimation: secondaryAnimation,
-       );
-     },
-     child: child,
-   );
- }
+  @override
+  Widget build(BuildContext context) {
+    return PageTransitionSwitcher(
+      transitionBuilder: (child, animation, secondaryAnimation) {
+        return FadeThroughTransition(
+          fillColor: fillColor,
+          child: child,
+          animation: animation,
+          secondaryAnimation: secondaryAnimation,
+        );
+      },
+      child: child,
+    );
+  }
 }
