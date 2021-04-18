@@ -759,26 +759,25 @@ class _ReplyFabState extends State<_ReplyFab>
           closedElevation: 6,
           closedBuilder: (context, openContainer) {
             return Tooltip(
-                message: tooltip,
-                child: InkWell(
-                  customBorder: circleFabBorder,
-                  onTap: () {
-                    Provider.of<EmailStore>(
-                      context,
-                      listen: false,
-                    ).onCompose = true;
-
-               
-                  },
-                  child: SizedBox(
-                    height: _mobileFabDimension,
-                    width: _mobileFabDimension,
-                    child: Center(
-                      child: fabSwitcher,
-                    ),
+              message: tooltip,
+              child: InkWell(
+                customBorder: circleFabBorder,
+                onTap: () {
+                  Provider.of<EmailStore>(
+                    context,
+                    listen: false,
+                  ).onCompose = true;
+                  openContainer();
+                },
+                child: SizedBox(
+                  height: _mobileFabDimension,
+                  width: _mobileFabDimension,
+                  child: Center(
+                    child: fabSwitcher,
                   ),
                 ),
-              );
+              ),
+            );
           },
         );
       },
